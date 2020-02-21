@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, SafeAreaView, Text, Button } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './styles';
 
@@ -31,7 +31,7 @@ function DetailsScreen({ route, navigation }) {
   const { otherParam } = route.params;
 
   return (
-    <View style={styles.body}>
+    <SafeAreaView style={styles.body}>
       <Text>Details Screen</Text>
       <Text>itemId: {JSON.stringify(itemId)}</Text>
       <Text>otherParam: {JSON.stringify(otherParam)}</Text>
@@ -47,7 +47,7 @@ function DetailsScreen({ route, navigation }) {
       />
       {/* <Button title="Go to Home" onPress={() => navigation.push('Todo')} /> */}
       <Button title="Go back" onPress={() => navigation.goBack()} />
-    </View>
+    </SafeAreaView>
   );
 }
 

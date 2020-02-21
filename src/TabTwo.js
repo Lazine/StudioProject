@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { View, Text, Button, TabBarIOS } from 'react-native';
+import { View, SafeAreaView, Text, Button, TabBarIOS } from 'react-native';
 import { styles } from './styles';
 
 function TabTwo() {
   return (
-    <View style={styles.body}>
+    <SafeAreaView style={styles.body}>
       <Text>TabTwo</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
