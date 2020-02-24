@@ -34,18 +34,20 @@ export const styles = StyleSheet.create({
     color: color.darkgray,
     position: 'absolute',
     top: 30,
-    left: 8,
+    left: 34,
     zIndex: 3,
   },
   addText: {
     justifyContent: 'center',
-    width: 316,
+    // width: 326,
     minHeight: 36,
     backgroundColor: color.white,
     paddingLeft: 28,
     paddingRight: 8,
     paddingVertical: 6,
     marginVertical: 20,
+    marginHorizontal: 24,
+    flex: 1,
     borderColor: color.dimgray,
     borderWidth: 1,
     borderRadius: 20,
@@ -53,21 +55,31 @@ export const styles = StyleSheet.create({
   activeInput: {
     borderColor: color.darkgray,
   },
-  listItems: {
-    // flex: 1,
-  },
   list: {
     flexDirection: 'row',
     alignItems: 'center',
-    // marginBottom: 6,
-    paddingVertical: 4,
+    justifyContent: 'space-between',
+    width: 314,
+    flex: 1,
+    paddingVertical: 6,
+  },
+  listLeftGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    paddingRight: 28,
   },
   checkBox: {
-    marginRight: 10,
+    width: 26,
+    height: 26,
   },
   listText: {
     fontSize: 16,
     color: color.gray,
+    flex: 1,
+    marginLeft: 10,
+    textAlignVertical: 'bottom',
+    alignSelf: 'center',
   },
   listTextInvalid: {
     color: color.darkgray,
@@ -75,6 +87,6 @@ export const styles = StyleSheet.create({
   },
   deleteIcon: {
     color: color.darkgray,
-    marginLeft: 30,
+    marginLeft: 8,
   }
 });

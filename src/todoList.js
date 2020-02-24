@@ -39,7 +39,7 @@ const DismissKeyboard = ({ children }) => {
 const TodoScreen = ({ navigation }) => {
   const [textValue, setTextValue] = useState('');
   const [activeText, setActiveText] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
+  // const [isCheck, addIsCheck] = useState(false);
   const [todos, setTodos] = useState([
     { value: 'hello~',
       isCheck: false,
@@ -51,34 +51,42 @@ const TodoScreen = ({ navigation }) => {
 
 
   const addTodo = (todo) => {
-    setTodos([...todos,{value: todo.nativeEvent.text, isCheck: false}]);
+    setTodos(
+      [...todos,
+        { value: todo.nativeEvent.text, 
+          isCheck: false }
+      ]
+    );
+    this.textInput.clear();
     console.log(todos);
   };
 
-  // const setIsCheck = index => {
-  //   const newTodos = [...todos];
-  //   newTodos[index].isCheck = true;
-  //   setTodos(newTodos);
-  // };
+  const setIsCheck = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].isCheck = !newTodos[index].isCheck;
+    setTodos(newTodos);
+  };
 
   _renderItem = ({ todo, index }) => {
     // const time = moment(new Date(item.drawDate)).format('A hh:mm');
     return (
       <View style={styles.list}>
-        <TouchableOpacity onPress={() => setIsCheck(true)}>
-          { isCheck ? (
-            <Image
-            source={require('./image/check.png')}
-            style={styles.checkBox}/> )
-            : (
+        <View style={styles.listLeftGroup}>
+          <TouchableOpacity onPress={() => setIsCheck(index)}>
+            { todos[index].isCheck ? (
               <Image
-              source={require('./image/uncheck.png')}
-              style={styles.checkBox}/> ) 
-            }
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={[styles.listText, isCheck ? styles.listTextInvalid : null]}>{todos[index].value}</Text>
-        </TouchableOpacity>
+              source={require('./image/check.png')}
+              style={styles.checkBox}/> )
+              : (
+                <Image
+                source={require('./image/uncheck.png')}
+                style={styles.checkBox}/> ) 
+              }
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={[styles.listText, todos[index].isCheck ? styles.listTextInvalid : null]}>{todos[index].value}</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={()=> setTodos('')}>
           <EIcon name="trash" size={30} style={styles.deleteIcon} />
         </TouchableOpacity>
@@ -101,7 +109,8 @@ const TodoScreen = ({ navigation }) => {
           // multiline={true}
           numberOfLines={2}
           clearButtonMode={'while-editing'}
-          value={textValue}
+          ref={input => { this.textInput = input }}
+          // value={textValue}
           onChangeText={text => setTextValue(text)}
           onSubmitEditing={addTodo}
           onFocus={()=> setActiveText(true)}
@@ -110,52 +119,7 @@ const TodoScreen = ({ navigation }) => {
       </View>
 
       <ScrollView style={styles.listItems}>
-        {/* 1 */}
-        <View style={styles.list}>
-          <TouchableOpacity onPress={()=> setIsCheck(true)}>
-            { isCheck ? (
-              <Image
-              source={require('./image/check.png')}
-              style={styles.checkBox}/> )
-              : (
-                <Image
-                source={require('./image/uncheck.png')}
-                style={styles.checkBox}/> ) 
-              }
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={[styles.listText, isCheck ? styles.listTextInvalid : null]}>Todo List~~ Nya Nya Studio</Text>
-          </TouchableOpacity> 
-          <TouchableOpacity onPress={()=> setTodos('')}>
-            <EIcon 
-              name="trash" 
-              size={30} 
-              style={styles.deleteIcon} />
-          </TouchableOpacity>
-        </View>
-
-        {/* {items.map( (item, key) => (
-          //2
-            <View style={styles.list}>
-              <TouchableOpacity onPress={() => setIsCheck(prevState => !prevState)}>
-                { isCheck ? (
-                  <Image
-                  source={require('./image/check.png')}
-                  style={styles.checkBox}/> )
-                  : (
-                    <Image
-                    source={require('./image/uncheck.png')}
-                    style={styles.checkBox}/> ) 
-                  }
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={[styles.listText, isCheck ? styles.listTextInvalid : null]}>{item.value}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <EIcon name="trash" size={30} style={styles.deleteIcon} />
-              </TouchableOpacity>
-            </View>
-        ))} */}
+        
         
         <FlatList
           data={todos}
@@ -164,10 +128,9 @@ const TodoScreen = ({ navigation }) => {
       
 
 
-        <Button
+        {/* <Button
           title="Go to Details"
           onPress={() => {
-            /* 1. Navigate to the Details route with params */
             navigation.navigate('Detail', {
               itemId: 86,
               otherParam: 'anything you want here',
@@ -178,7 +141,7 @@ const TodoScreen = ({ navigation }) => {
           title="Go to Tabs"
           onPress={() => 
             navigation.navigate('Tabs', { 
-              screen: 'TabTwo'   //可以操控要去Tab的哪個頁面
+              screen: 'TabTwo' 
             })
           }
         />
@@ -189,7 +152,7 @@ const TodoScreen = ({ navigation }) => {
               screen: 'MainModal' 
             })
           }
-        />
+        /> */}
 
       </ScrollView>
     </SafeAreaView>
