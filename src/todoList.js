@@ -17,7 +17,10 @@ const Header = (props) => {
         </TouchableOpacity>
         <Text style={styles.headerText}>NyaNyaNyaStudio</Text>
         <TouchableOpacity onPress={props.onPress}>
-          <Icon name="rocket" size={30} color="#a7a7a7" />
+          {/* <Icon name="rocket" size={30} color="#a7a7a7" /> */}
+          <Image
+            source={require('./image/nya.png')}
+            style={styles.nyaIcon} />
         </TouchableOpacity>
       </View>
   )
@@ -38,9 +41,10 @@ const DismissKeyboard = ({ children }) => {
 
 const TodoScreen = ({ navigation }) => {
   // const [textValue, setTextValue] = useState('');
+  // const [isCheck, setIsCheck] = useState(false);
   const [activeInput, setActiveInput] = useState(false);
-  // const [isCheck, addIsCheck] = useState(false);
-  const [todos, setTodos] = useState([
+  const [todos, setTodos] = useState(
+    [
     { value: 'hello~',
       isCheck: false,
     },
@@ -69,6 +73,13 @@ const TodoScreen = ({ navigation }) => {
   };
 
 
+  const removeTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+
   _renderItem = ({ item, index }) => {
     // const time = moment(new Date(item.drawDate)).format('A hh:mm');
     return (
@@ -89,7 +100,7 @@ const TodoScreen = ({ navigation }) => {
             <Text style={[styles.listText, item.isCheck ? styles.listTextInvalid : null]}>{todos[index].value}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={()=> setTodos('')}>
+        <TouchableOpacity onPress={()=> removeTodo(index)}>
           <EIcon name="trash" size={30} style={styles.deleteIcon} />
         </TouchableOpacity>
       </View>
@@ -113,8 +124,8 @@ const TodoScreen = ({ navigation }) => {
           clearButtonMode={'while-editing'}
           ref={input => { this.textInput = input }}
           // value={textValue}
-          // onChangeText={text => setTextValue(text)}
-          onSubmitEditing={addTodo}
+          // onChangeText={text => setTextValue(text)}  // triggered when you type any symbol in the text input
+          onSubmitEditing={addTodo}  //triggered when you click the text input submit button
           onFocus={()=> setActiveInput(true)}
           onBlur={()=> setActiveInput(false)}
         />

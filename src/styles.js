@@ -26,6 +26,9 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  nyaIcon: {
+    width: 30,
+  },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
