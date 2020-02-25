@@ -120,10 +120,11 @@ const TodoScreen = ({ navigation }) => {
           placeholder={'add your todos...'}
           placeholderTextColor={'#b1b1b1'}
           // multiline={true}
-          numberOfLines={2}
-          clearButtonMode={'while-editing'}
+          numberOfLines= {2}
+          clearButtonMode= "while-editing"
+          returnKeyType= "done"
           ref={input => { this.textInput = input }}
-          // value={textValue}
+          value={todos}
           // onChangeText={text => setTextValue(text)}  // triggered when you type any symbol in the text input
           onSubmitEditing={addTodo}  //triggered when you click the text input submit button
           onFocus={()=> setActiveInput(true)}

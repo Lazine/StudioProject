@@ -76,16 +76,17 @@ export const styles = StyleSheet.create({
     paddingRight: 28,
   },
   checkBox: {
-    width: 26,
-    height: 26,
+    width: 24,
+    height: 24,
   },
   listText: {
     fontSize: 16,
+    lineHeight: 22,
     color: color.gray,
     flex: 1,
     marginLeft: 10,
     textAlignVertical: 'bottom',
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
   },
   listTextInvalid: {
     color: color.darkgray,
