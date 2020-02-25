@@ -55,7 +55,10 @@ export const styles = StyleSheet.create({
   activeInput: {
     borderColor: color.darkgray,
   },
-  list: {
+  // list: {
+    
+  // },
+  oneTodo: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -63,7 +66,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 6,
   },
-  listLeftGroup: {
+  todoLeftGroup: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,

@@ -41,13 +41,13 @@ function App() {
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Todo">
         <Stack.Screen name="Todo" component={TodoScreen} />
-        <Stack.Screen 
+        {/* <Stack.Screen 
           name="Detail" 
           component={DetailsScreen}  
           options={{
             headerShown: false,
           }}
-        />
+        /> */}
         <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="MainModalScreen" component={MainModalScreen} />
       </Drawer.Navigator>
