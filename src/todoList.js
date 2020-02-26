@@ -40,29 +40,50 @@ const DismissKeyboard = ({ children }) => {
 // const todoList = [];
 
 const TodoScreen = ({ navigation }) => {
-  // const [textValue, setTextValue] = useState('');
   // const [isCheck, setIsCheck] = useState(false);
+  const [textValue, setTextValue] = useState('');  
   const [activeInput, setActiveInput] = useState(false);
+  const [todoId, setTodoId] = useState(0);
   const [todos, setTodos] = useState(
     [
     { value: 'hello~',
       isCheck: false,
+      id: 1,
     },
     { value: 'cat🐱', 
       isCheck: true,
+      id: 2,
     },
   ]);
+  
 
+  const addTodo = ( todo, index ) => {
 
-  const addTodo = ( todo ) => {
-    setTodos(
-      [...todos,
-        { value: todo.nativeEvent.text, 
-          isCheck: false }
-      ]
-    );
+    if( todoId === 0 ){
+        setTodos(
+          [...todos,
+            { value: todo.nativeEvent.text, 
+              isCheck: false,
+              id: todos === '' ? 0 : todos.slice(-1).pop().id + 1,
+            }
+          ]
+      );
+    }else {
+      // const todoIndex = todos.findIndex(item => item.id === textValue);
+      const newTodo = {...todos[todoId - 1], value: todo.nativeEvent.text};
+      setTodos(
+        [ 
+          ...todos.slice(0, todoId - 1),
+          newTodo,
+          ...todos.slice(todoId, todos.length),
+        ]
+      );
+      setTodoId(0);
+      console.log(todoId);
+    };
+
     this.textInput.clear();
-    console.log(todos);
+    // console.log(todos);
   };
 
 
@@ -78,6 +99,14 @@ const TodoScreen = ({ navigation }) => {
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
+
+
+  const editTodo = ( index, todo )  => {
+    const newTodos = [...todos];
+    setTextValue(newTodos[index].value);
+    setTodoId(newTodos[index].id);
+    console.log(newTodos[index]);
+  }
 
 
   _renderItem = ({ item, index }) => {
@@ -96,7 +125,7 @@ const TodoScreen = ({ navigation }) => {
                 style={styles.checkBox}/> ) 
               }
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=> editTodo(index)}>
             <Text style={[styles.listText, item.isCheck ? styles.listTextInvalid : null]}>{todos[index].value}</Text>
           </TouchableOpacity>
         </View>
@@ -124,9 +153,9 @@ const TodoScreen = ({ navigation }) => {
           clearButtonMode= "while-editing"
           returnKeyType= "done"
           ref={input => { this.textInput = input }}
-          value={todos}
+          defaultValue={textValue}
           // onChangeText={text => setTextValue(text)}  // triggered when you type any symbol in the text input
-          onSubmitEditing={addTodo}  //triggered when you click the text input submit button
+          onSubmitEditing={(text) => addTodo(text)}  //triggered when you click the text input submit button
           onFocus={()=> setActiveInput(true)}
           onBlur={()=> setActiveInput(false)}
         />

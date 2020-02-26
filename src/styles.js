@@ -73,11 +73,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-    paddingRight: 28,
+    paddingRight: 20,
   },
   checkBox: {
-    width: 24,
-    height: 24,
+    width: 26,
+    height: 26,
   },
   listText: {
     fontSize: 16,
