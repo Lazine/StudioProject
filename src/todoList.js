@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StatusBar, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard, Image,TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Text, Button, StatusBar, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard, Image,TouchableOpacity, ScrollView, FlatList,TouchableHighlight } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EIcon from 'react-native-vector-icons/EvilIcons';
+import FIcon from 'react-native-vector-icons/Feather';
 import { styles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
@@ -35,9 +36,6 @@ const DismissKeyboard = ({ children }) => {
 }
 
 
-
-
-// const todoList = [];
 
 const TodoScreen = ({ navigation }) => {
   // const [isCheck, setIsCheck] = useState(false);
@@ -79,7 +77,7 @@ const TodoScreen = ({ navigation }) => {
         ]
       );
       setTodoId(0);
-      console.log(todoId);
+      // console.log(todoId);
     };
 
     this.textInput.clear();
@@ -105,7 +103,13 @@ const TodoScreen = ({ navigation }) => {
     const newTodos = [...todos];
     setTextValue(newTodos[index].value);
     setTodoId(newTodos[index].id);
-    console.log(newTodos[index]);
+    // console.log(textValue);
+  }
+
+  const clearText = () => {
+    this.textInput.clear();
+    // setTextValue('');
+    setTodoId(0);
   }
 
 
@@ -138,7 +142,7 @@ const TodoScreen = ({ navigation }) => {
   _keyExtractor = (item, index) => index.toString();
 
   return (
-    <DismissKeyboard>
+    <DismissKeyboard onPress={()=> setTodoId(0)}>
     <SafeAreaView style={styles.body}>
       <StatusBar/>
       <Header onPress={()=> setTodos('')}/>
@@ -150,19 +154,23 @@ const TodoScreen = ({ navigation }) => {
           placeholderTextColor={'#b1b1b1'}
           // multiline={true}
           numberOfLines= {2}
-          clearButtonMode= "while-editing"
           returnKeyType= "done"
           ref={input => { this.textInput = input }}
+          // value={textValue}
           defaultValue={textValue}
-          // onChangeText={text => setTextValue(text)}  // triggered when you type any symbol in the text input
+          // onChangeText={(text) => setTextValue(text)}  // triggered when you type any symbol in the text input
           onSubmitEditing={(text) => addTodo(text)}  //triggered when you click the text input submit button
           onFocus={()=> setActiveInput(true)}
           onBlur={()=> setActiveInput(false)}
         />
+        { activeInput ? (
+          <TouchableOpacity style={styles.clear} onPress={() => clearText()}>
+             <FIcon name="x-circle" size={16} style={styles.clearIcon}/>
+          </TouchableOpacity> )
+         : null }
       </View>
 
       <View style={styles.listItems}>
-        
         
         <FlatList
           data={todos}
@@ -183,6 +191,7 @@ const TodoScreen = ({ navigation }) => {
             });
           }}
         /> */}
+
         {/* <Button
           title="Go to Tabs"
           onPress={() => 
@@ -191,6 +200,7 @@ const TodoScreen = ({ navigation }) => {
             })
           }
         /> */}
+
         {/* <Button
           title="Go to MainModal"
           onPress={() => 

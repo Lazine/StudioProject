@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   writeIcon: {
     color: color.darkgray,
     position: 'absolute',
-    top: 30,
+    top: 28.8,
     left: 34,
     zIndex: 3,
   },
@@ -95,5 +95,21 @@ export const styles = StyleSheet.create({
   deleteIcon: {
     color: color.darkgray,
     marginLeft: 8,
-  }
+  },
+  clear:{
+    width: 30,
+    height: 36,
+    position: 'absolute',
+    right: 30,
+    // top: -10,
+    justifyContent: 'center',
+    paddingTop: 2,
+    // alignContent: 'flex-end',
+  },
+  clearIcon: {
+    color: color.darkgray,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+
 });
