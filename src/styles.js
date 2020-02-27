@@ -111,5 +111,11 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
+  bigCat: {
+    width: 104,
+    position: 'absolute',
+    right: 0,
+    bottom: -10,
+  },
 
 });

@@ -6,4 +6,5 @@ module.exports = {
     rules: {
       bracketSpacing: true,
     }
+    // 'plugin:@typescript-eslint/recommended'
   };
