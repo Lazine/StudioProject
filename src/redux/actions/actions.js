@@ -10,11 +10,14 @@ export const TodoActionType = {
 }
 
 
+let nextTodoId = 0;
+
 export const addTodo = value => ({
     type: ADD_TODO,
     payload: {
-      id: id,
       value: value,
+      isCheck: false,
+      id: nextTodoId++,
     }
 })
 
@@ -37,8 +40,8 @@ export const checkTodo = (id) => ({
 export const editTodo = (id, value) => ({
 	type: EDIT_TODO,
 	payload: {
-    id: id,
     value: value,
+    id: id,
   }
 })
 

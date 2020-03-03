@@ -5,32 +5,34 @@ const initialState = {
     {value: 'hello~', isCheck: false, id: 1},
     {value: 'cat🐱', isCheck: true, id: 2},
   ],
+
+  QQ: '123',
 }
 
-const reducer = (state = initialState, action) => {
-  switch(action.type){
+export default (state = initialState, action) => {
+  // switch(action.type){
 		
-		case TodoActionType.ADD_TODO:
-      return{
+	// 	case TodoActionType.ADD_TODO:
+  //     return{
 
-			};
+	// 		};
     
-    case TodoActionType.REMOVE_TODO:
-      return{
+  //   case TodoActionType.REMOVE_TODO:
+  //     return{
 
-      };
+  //     };
     
-    case TodoActionType.CHECK_TODO:
-      return{
+  //   case TodoActionType.CHECK_TODO:
+  //     return{
 
-      };
+  //     };
     
-		default:
+	// 	default:
       return state;
-  }
+  // 
 }
 
-export default reducer;
+// export default reducer;
 
 // const reducer = combineReducers({
 //   todoAction: todoReducer,

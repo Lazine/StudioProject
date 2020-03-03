@@ -7,12 +7,10 @@ import reducer from './src/redux/reducer/reducer';
 
 const store = createStore(reducer);
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <AppContainer />
-      </Provider>
-    );
-	}
-}
+const App = () => (
+    <Provider store={store}>
+      <AppContainer />
+    </Provider>
+  );
+
+export default App;

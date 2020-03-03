@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import TodolistScreen from '../screens/todoList';
+import TodoScreen from '../screens/todoList';
 import DetailsScreen from '../screens/detail';
 import TabOne from '../screens/TabOne';
 import TabTwo from '../screens/TabTwo';
@@ -38,11 +38,11 @@ function Tabs() {
 }
 
 
-function AppContainer() {
+function AppContainer(props) {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Todo">
-        <Stack.Screen name="Todo" component={TodolistScreen} />
+        <Stack.Screen name="Todo" component={TodoScreen}/>
         {/* <Stack.Screen 
           name="Detail" 
           component={DetailsScreen}  

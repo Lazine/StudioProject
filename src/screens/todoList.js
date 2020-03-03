@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 // const Stack = createStackNavigator();
 
-const Header = props => {
+const Header = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.header}>
@@ -20,33 +20,30 @@ const Header = props => {
         <Icon name="text" size={30} color="#262626" />
       </TouchableOpacity>
       <Text style={styles.headerText}>NyaNyaNyaStudio</Text>
-      <TouchableOpacity onPress={props.onPress}>
+      {/* <TouchableOpacity onPress={props.onPress}> */}
         {/* <Icon name="rocket" size={30} color="#a7a7a7" /> */}
         <Image 
           source={require('../image/nya.png')} 
           style={styles.nyaIcon} />
-      </TouchableOpacity>
+      {/* </TouchableOpacity> */}
     </View>
   );
 };
 
-const DismissKeyboard = ({children}) => {
-  return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      {children}
-    </TouchableWithoutFeedback>
-  );
-};
+// const DismissKeyboard = ({children}, props) => {
+//   return (
+//     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+//       {children}
+//     </TouchableWithoutFeedback>
+//   );
+// };
 
-const TodoScreen = ({navigation}) => {
+const TodoScreen = (props,{navigation}) => {
   // const [isCheck, setIsCheck] = useState(false);
   const [textValue, setTextValue] = useState('');
   const [activeInput, setActiveInput] = useState(false);
   const [todoId, setTodoId] = useState(0);
-  const [todos, setTodos] = useState([
-    {value: 'hello~', isCheck: false, id: 1},
-    {value: 'cat🐱', isCheck: true, id: 2},
-  ]);
+  // const [todos, setTodos] = useState([]);
 
   const addTodo = (todo, index) => {
     if (todoId === 0) {
@@ -86,7 +83,7 @@ const TodoScreen = ({navigation}) => {
     setTodos(newTodos);
   };
 
-  const editTodo = (index, todo) => {
+  const editTodo = (index, todos) => {
     // const newTodos = [...todos];
     setTextValue(todos[index].value);
     setTodoId(todos[index].id);
@@ -123,7 +120,7 @@ const TodoScreen = ({navigation}) => {
                 styles.listText,
                 item.isCheck ? styles.listTextInvalid : null,
               ]}>
-              {todos[index].value}
+              {item.value}
             </Text>
           </TouchableOpacity>
         </View>
@@ -136,7 +133,7 @@ const TodoScreen = ({navigation}) => {
   _keyExtractor = (item, index) => index.toString();
 
   return (
-    <DismissKeyboard>
+    // <DismissKeyboard>
       <SafeAreaView style={styles.body}>
         <StatusBar />
         <Header onPress={() => setTodos('')} />
@@ -165,10 +162,10 @@ const TodoScreen = ({navigation}) => {
             </TouchableOpacity>
           ) : null}
         </View>
-
+        <Text>{props.todosk}</Text>
         <View style={styles.listItems}>
           <FlatList
-            data={todos}
+            data={props.todos}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             // inverted={true}
@@ -192,6 +189,7 @@ const TodoScreen = ({navigation}) => {
               })
             }
           /> */}
+          
         </View>
         {/* <TouchableOpacity style={styles.bigCat}>
           <Image
@@ -199,22 +197,28 @@ const TodoScreen = ({navigation}) => {
             style={styles.bigCatImg}
           />
         </TouchableOpacity> */}
+      {console.log(props.todos)}
+      
       </SafeAreaView>
-    </DismissKeyboard>
+    // </DismissKeyboard>
   );
 };
 
 
-const mapStateToProps = state => ({
-  todos: state.todoList
-})
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setImage: source  => dispatch({type: ADD_TODO, source}),
+function mapStateToProps(state){
+  return{
+    todosk: state.QQ,
+    todos: state.todoList,
   };
-};
+}
 
-const TodolistScreen = connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     checkTodo: (id) => dispatch(actions.checkTodo(id)),
+//     addTodo: (text) => dispatch(actions.addTodo(text))
+//   };
+// };
 
-export default TodolistScreen;
+// const TodolistScreen = connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
+
+export default connect(mapStateToProps)(TodoScreen);
