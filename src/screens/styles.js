@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { StyleSheet } from 'react-native';
-import { widthRatio, width } from './asset/ratio';
-import { color } from './asset/color';
+import { widthRatio, width } from '../asset/ratio';
+import { color } from '../asset/color';
 
 
 export const styles = StyleSheet.create({

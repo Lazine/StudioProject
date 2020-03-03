@@ -1,25 +1,13 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StatusBar,
-  SafeAreaView,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  TouchableHighlight,
-} from 'react-native';
+import { View, Text, Button, StatusBar, SafeAreaView, TextInput,TouchableWithoutFeedback, Keyboard, Image, TouchableOpacity, ScrollView, FlatList, TouchableHighlight } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
+// import { mapStateToProps } from 'react-redux';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EIcon from 'react-native-vector-icons/EvilIcons';
 import FIcon from 'react-native-vector-icons/Feather';
-import {styles} from './styles';
-import {useNavigation} from '@react-navigation/native';
+import { styles } from './styles';
+import { useNavigation } from '@react-navigation/native';
 
 // const Stack = createStackNavigator();
 
@@ -34,7 +22,9 @@ const Header = props => {
       <Text style={styles.headerText}>NyaNyaNyaStudio</Text>
       <TouchableOpacity onPress={props.onPress}>
         {/* <Icon name="rocket" size={30} color="#a7a7a7" /> */}
-        <Image source={require('./image/nya.png')} style={styles.nyaIcon} />
+        <Image 
+          source={require('../image/nya.png')} 
+          style={styles.nyaIcon} />
       </TouchableOpacity>
     </View>
   );
@@ -117,12 +107,12 @@ const TodoScreen = ({navigation}) => {
           <TouchableOpacity onPress={() => setIsCheck(index)}>
             {item.isCheck ? (
               <Image
-                source={require('./image/check.png')}
+                source={require('../image/check.png')}
                 style={styles.checkBox}
               />
             ) : (
               <Image
-                source={require('./image/uncheck.png')}
+                source={require('../image/uncheck.png')}
                 style={styles.checkBox}
               />
             )}
@@ -203,15 +193,28 @@ const TodoScreen = ({navigation}) => {
             }
           /> */}
         </View>
-        <TouchableOpacity style={styles.bigCat}>
+        {/* <TouchableOpacity style={styles.bigCat}>
           <Image
             source={require('./image/bigCat_angry.png')}
             style={styles.bigCatImg}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </SafeAreaView>
     </DismissKeyboard>
   );
 };
 
-export default TodoScreen;
+
+const mapStateToProps = state => ({
+  todos: state.todoList
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setImage: source  => dispatch({type: ADD_TODO, source}),
+  };
+};
+
+const TodolistScreen = connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
+
+export default TodolistScreen;
