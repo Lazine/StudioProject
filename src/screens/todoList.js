@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StatusBar, SafeAreaView, TextInput,TouchableWithoutFeedback, Keyboard, Image, TouchableOpacity, ScrollView, FlatList, TouchableHighlight } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
-// import { mapStateToProps } from 'react-redux';
 import { connect } from 'react-redux';
 import { addTodo, editTodo, deleteTodo, checkTodo } from '../redux/actions/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -43,7 +42,7 @@ const Todo = (props) => {
 
   // const { todo, toggleTodo, addTodo } = props;
 
-  _renderItem = ({item, index}) => {
+  _renderItem = ({item}) => {
     // const time = moment(new Date(item.drawDate)).format('A hh:mm');
     return (
       <View style={styles.oneTodo}>
@@ -92,10 +91,9 @@ const Todo = (props) => {
 
 
 const TodoScreen = (props) => {
-  const [textValue, setTextValue] = useState('');
+  // const [textValue, setTextValue] = useState('');
   const [activeInput, setActiveInput] = useState(false);
-  // const [todoId, setTodoId] = useState(0);
-  const [todos, setTodos] = useState([]);
+  // const [todos, setTodos] = useState([]);
 
 
   const addNewTodo = (value) => {
@@ -128,14 +126,14 @@ const TodoScreen = (props) => {
               this.textInput = input;
             }}
             // value={textValue}
-            defaultValue={textValue}
+            // defaultValue={textValue}
             // onChangeText={(text) => setTextValue(text)}  // triggered when you type any symbol in the text input
             onSubmitEditing={value => addNewTodo(value.nativeEvent.text)} //triggered when you click the text input submit button
             onFocus={() => setActiveInput(true)}
             onBlur={() => setActiveInput(false)}
           />
           {activeInput ? (
-            <TouchableOpacity style={styles.clear} onPress={() => clearText()}>
+            <TouchableOpacity style={styles.clear} onPress={() => this.textInput.clear()}>
               <FIcon name="x-circle" size={16} style={styles.clearIcon} />
             </TouchableOpacity>
           ) : null}
@@ -144,9 +142,10 @@ const TodoScreen = (props) => {
         <View style={styles.listItems}>
           <Todo 
             data={props.todos} 
+            check={(id) => props.checkTodo(id)}
             delete={(id) => props.deleteTodo(id)}
-            check={(id) => props.checkTodo(id)}/>    
-          {console.log(props.todos)}
+            />    
+          {/* {console.log(props.todos)} */}
         </View>
         {/* <TouchableOpacity style={styles.bigCat}>
           <Image
