@@ -22,29 +22,28 @@ const todoReducer = (state = initialState, action) => {
         //   isCheck: action.payload.isCheck,
         //   value: action.payload.value
         // }
-      ]
-    }
+        ]
+      }
     
-    case 'REMOVE_TODO':
-      return state.filter(todo =>
-        todo.id !== action.id
-      )
-    
+    case 'DELETE_TODO':
+      return {
+        ...state,
+        todoList: state.todoList.filter(todo =>
+          todo.id !== action.payload.id,
+        )
+      }
+      
     case 'CHECK_TODO':
-      return state.map((todo, index) => {
-        if (index === action.index) {
-          return Object.assign({}, todo, {
-            completed: !todo.completed
-          })
-        }
-        return todo
-      })
+      return {
+        ...state,
+        todoList: state.todoList.map(todo =>
+        todo.id === action.payload.id ? { ...todo, isCheck: !todo.isCheck } : todo,
+        )
+      }
 
     case 'EDIT_TODO': 
-      return state.map(todo =>
-        todo.id === action.id ?
-          { ...todo, text: action.text } :
-          todo
+      return state.todoList.map(todo =>
+        todo.id === action.payload.id ? { ...todo, value: action.value } : todo
       )
     
     case 'CLEAR_TODO':

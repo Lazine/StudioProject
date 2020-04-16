@@ -3,7 +3,7 @@ import { View, Text, Button, StatusBar, SafeAreaView, TextInput,TouchableWithout
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 // import { mapStateToProps } from 'react-redux';
 import { connect } from 'react-redux';
-import { addTodo, editTodo } from '../redux/actions/actions';
+import { addTodo, editTodo, deleteTodo, checkTodo } from '../redux/actions/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EIcon from 'react-native-vector-icons/EvilIcons';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -43,12 +43,12 @@ const Todo = (props) => {
 
   // const { todo, toggleTodo, addTodo } = props;
 
-  _renderItem = ({item, index, checkTodo}) => {
+  _renderItem = ({item, index}) => {
     // const time = moment(new Date(item.drawDate)).format('A hh:mm');
     return (
       <View style={styles.oneTodo}>
         <View style={styles.todoLeftGroup}>
-          <TouchableOpacity onPress={() => checkTodo(index)}>
+          <TouchableOpacity onPress={() => props.check(item.id)}>
             {item.isCheck ? (
               <Image
                 source={require('../image/check.png')}
@@ -71,7 +71,7 @@ const Todo = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => removeTodo(index)}>
+        <TouchableOpacity onPress={() => props.delete(item.id)}>
           <EIcon name="trash" size={30} style={styles.deleteIcon} />
         </TouchableOpacity>
       </View>
@@ -106,7 +106,7 @@ const TodoScreen = (props) => {
       props.addTodo(value);
     }
     this.textInput.clear();
-    console.log(value);
+    // console.log(value);
   };
   
 
@@ -142,7 +142,10 @@ const TodoScreen = (props) => {
         </View>
         {/* <Text>{props.todosk}</Text> */}
         <View style={styles.listItems}>
-          <Todo data={props.todos}/>    
+          <Todo 
+            data={props.todos} 
+            delete={(id) => props.deleteTodo(id)}
+            check={(id) => props.checkTodo(id)}/>    
           {console.log(props.todos)}
         </View>
         {/* <TouchableOpacity style={styles.bigCat}>
@@ -169,6 +172,7 @@ const mapDispatchToProps = dispatch => ({
 
     addTodo: (value) => dispatch(addTodo(value)),
     checkTodo: (id) => dispatch(checkTodo(id)),
+    deleteTodo: (id) => dispatch(deleteTodo(id))
 
 });
 
