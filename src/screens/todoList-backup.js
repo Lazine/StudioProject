@@ -3,7 +3,6 @@ import { View, Text, Button, StatusBar, SafeAreaView, TextInput,TouchableWithout
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 // import { mapStateToProps } from 'react-redux';
 import { connect } from 'react-redux';
-import { addTodo, editTodo } from '../redux/actions/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EIcon from 'react-native-vector-icons/EvilIcons';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -12,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 // const Stack = createStackNavigator();
 
-const Header = (props) => {
+const Header = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.header}>
@@ -21,34 +20,88 @@ const Header = (props) => {
         <Icon name="text" size={30} color="#262626" />
       </TouchableOpacity>
       <Text style={styles.headerText}>NyaNyaNyaStudio</Text>
-      <TouchableOpacity onPress={props.onPress}>
+      {/* <TouchableOpacity onPress={props.onPress}> */}
         {/* <Icon name="rocket" size={30} color="#a7a7a7" /> */}
         <Image 
           source={require('../image/nya.png')} 
           style={styles.nyaIcon} />
-      </TouchableOpacity>
+      {/* </TouchableOpacity> */}
     </View>
   );
 };
 
-const DismissKeyboard = ({children}) => {
-  return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      {children}
-    </TouchableWithoutFeedback>
-  );
-};
+// const DismissKeyboard = ({children}) => {
+//   return (
+//     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+//       {children}
+//     </TouchableWithoutFeedback>
+//   );
+// };
 
-const Todo = (props) => {
+const TodoScreen = (props) => {
+  // const [isCheck, setIsCheck] = useState(false);
+  const [textValue, setTextValue] = useState('');
+  const [activeInput, setActiveInput] = useState(false);
+  const [todoId, setTodoId] = useState(0);
+  // const [todos, setTodos] = useState([]);
 
-  // const { todo, toggleTodo, addTodo } = props;
+  const addTodo = (todo, index) => {
+    if (todoId === 0) {
+      setTodos([
+        ...todos,
+        {
+          value: todo.nativeEvent.text,
+          isCheck: false,
+          id: todos === '' ? 0 : todos.slice(-1).pop().id + 1,
+        },
+      ]);
+    } else {
+      // const todoIndex = todos.findIndex(item => item.id === textValue);
+      const newTodo = {...todos[todoId - 1], value: todo.nativeEvent.text};
+      setTodos([
+        ...todos.slice(0, todoId - 1),
+        newTodo,
+        ...todos.slice(todoId, todos.length),
+      ]);
+      setTodoId(0);
+      // console.log(todoId);
+    }
 
-  _renderItem = ({item, index, checkTodo}) => {
+    this.textInput.clear();
+    // console.log(todos);
+  };
+
+  const setIsCheck = index => {
+    const newTodos = [...todos];
+    newTodos[index].isCheck = !newTodos[index].isCheck;
+    setTodos(newTodos);
+  };
+
+  const removeTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+  const editTodo = (index, todos) => {
+    // const newTodos = [...todos];
+    setTextValue(todos[index].value);
+    setTodoId(todos[index].id);
+    // console.log(textValue);
+  };
+
+  const clearText = () => {
+    // this.textInput.clear();
+    setTextValue('');
+    setTodoId(0);
+  };
+
+  _renderItem = ({item, index}) => {
     // const time = moment(new Date(item.drawDate)).format('A hh:mm');
     return (
       <View style={styles.oneTodo}>
         <View style={styles.todoLeftGroup}>
-          <TouchableOpacity onPress={() => checkTodo(index)}>
+          <TouchableOpacity onPress={() => setIsCheck(index)}>
             {item.isCheck ? (
               <Image
                 source={require('../image/check.png')}
@@ -78,40 +131,9 @@ const Todo = (props) => {
     );
   };
   _keyExtractor = (item, index) => index.toString();
-  // console.log(props.data)
-  return(
-    <FlatList
-      data={props.data}
-      renderItem={this._renderItem}
-      keyExtractor={this._keyExtractor}
-      // inverted={true}
-      // columnWrapperStyle={styles.list}
-    />
-    )
-  }
-
-
-const TodoScreen = (props) => {
-  const [textValue, setTextValue] = useState('');
-  const [activeInput, setActiveInput] = useState(false);
-  // const [todoId, setTodoId] = useState(0);
-  const [todos, setTodos] = useState([]);
-
-
-  const addNewTodo = (value) => {
-    if(props.id){
-      null
-      // props.editTodo(value);
-    }else{
-      props.addTodo(value);
-    }
-    this.textInput.clear();
-    console.log(value);
-  };
-  
 
   return (
-    <DismissKeyboard>
+    // <DismissKeyboard>
       <SafeAreaView style={styles.body}>
         <StatusBar />
         <Header onPress={() => setTodos('')} />
@@ -130,7 +152,7 @@ const TodoScreen = (props) => {
             // value={textValue}
             defaultValue={textValue}
             // onChangeText={(text) => setTextValue(text)}  // triggered when you type any symbol in the text input
-            onSubmitEditing={value => addNewTodo(value.nativeEvent.text)} //triggered when you click the text input submit button
+            onSubmitEditing={text => addTodo(text)} //triggered when you click the text input submit button
             onFocus={() => setActiveInput(true)}
             onBlur={() => setActiveInput(false)}
           />
@@ -140,10 +162,34 @@ const TodoScreen = (props) => {
             </TouchableOpacity>
           ) : null}
         </View>
-        {/* <Text>{props.todosk}</Text> */}
+        <Text>{props.todosk}</Text>
         <View style={styles.listItems}>
-          <Todo data={props.todos}/>    
-          {console.log(props.todos)}
+          <FlatList
+            data={props.todos}
+            renderItem={this._renderItem}
+            keyExtractor={this._keyExtractor}
+            // inverted={true}
+            // columnWrapperStyle={styles.list}
+          />
+
+          {/* <Button
+            title="Go to Tabs"
+            onPress={() =>
+              navigation.navigate('Tabs', {
+                screen: 'TabTwo'
+              })
+            }
+          /> */}
+
+          {/* <Button
+            title="Go to MainModal"
+            onPress={() =>
+              navigation.navigate('MainModalScreen', {
+                screen: 'MainModal'
+              })
+            }
+          /> */}
+          
         </View>
         {/* <TouchableOpacity style={styles.bigCat}>
           <Image
@@ -151,35 +197,28 @@ const TodoScreen = (props) => {
             style={styles.bigCatImg}
           />
         </TouchableOpacity> */}
+      {console.log(props.todos)}
       
       </SafeAreaView>
-    </DismissKeyboard>
+    // </DismissKeyboard>
   );
 };
 
 
 function mapStateToProps(state){
   return{
-    todosk: state.todoReducer.QQ,
-    todos: state.todoReducer.todoList,
+    todosk: state.QQ,
+    todos: state.todoList,
   };
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTodo: (text) => dispatch(actions.addTodo(text)),
+    checkTodo: (id) => dispatch(actions.checkTodo(id)),
+  };
+};
 
-    addTodo: (value) => dispatch(addTodo(value)),
-    checkTodo: (id) => dispatch(checkTodo(id)),
+// const TodolistScreen = connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
 
-});
-
-// const mapDispatchToProps = dispatch => (
-//   bindActionCreators({
-//     addTodo,
-//   }, dispatch)
-// );
-
-const TodolistScreen = connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
-
-//  const TodolistScreen = connect(mapStateToProps, {addTodo})(TodoScreen);
-
- export default TodolistScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
