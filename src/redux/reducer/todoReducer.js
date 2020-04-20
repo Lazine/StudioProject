@@ -42,10 +42,13 @@ const todoReducer = (state = initialState, action) => {
       }
 
     case 'EDIT_TODO': 
-      return state.todoList.map(todo =>
+      return {
+        ...state,
+        todoList: state.todoList.map(todo =>
         todo.id === action.payload.id ? { ...todo, value: action.value } : todo
-      )
-    
+        )
+      }
+      
     case 'CLEAR_TODO':
       return [...state];
 

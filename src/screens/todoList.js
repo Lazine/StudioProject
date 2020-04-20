@@ -60,7 +60,7 @@ const Todo = (props) => {
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => editTodo(index)}>
+          <TouchableOpacity onPress={() => props.edit(item.id)}>
             <Text
               style={[
                 styles.listText,
@@ -75,12 +75,12 @@ const Todo = (props) => {
         </TouchableOpacity>
       </View>
     );
+    
   };
   _keyExtractor = (item, index) => index.toString();
-  // console.log(props.data)
   return(
     <FlatList
-      data={props.data}
+    data={props.data}
       renderItem={this._renderItem}
       keyExtractor={this._keyExtractor}
       // inverted={true}
@@ -91,22 +91,28 @@ const Todo = (props) => {
 
 
 const TodoScreen = (props) => {
-  // const [textValue, setTextValue] = useState('');
+  const [textValue, setTextValue] = useState('');
   const [activeInput, setActiveInput] = useState(false);
   // const [todos, setTodos] = useState([]);
 
+  const choseText = (id) => { 
+    const pressObject = props.todos.find(todo => todo.id === id).value;
+    return pressObject; 
+    // console.log(pressObject.value);
+  };
 
   const addNewTodo = (value) => {
     if(props.id){
-      null
       // props.editTodo(value);
+      null
+      // console.log(id);
     }else{
       props.addTodo(value);
     }
     this.textInput.clear();
-    // console.log(value);
   };
   
+
 
   return (
     <DismissKeyboard>
@@ -126,7 +132,7 @@ const TodoScreen = (props) => {
               this.textInput = input;
             }}
             // value={textValue}
-            // defaultValue={textValue}
+            defaultValue={textValue}
             // onChangeText={(text) => setTextValue(text)}  // triggered when you type any symbol in the text input
             onSubmitEditing={value => addNewTodo(value.nativeEvent.text)} //triggered when you click the text input submit button
             onFocus={() => setActiveInput(true)}
@@ -144,6 +150,7 @@ const TodoScreen = (props) => {
             data={props.todos} 
             check={(id) => props.checkTodo(id)}
             delete={(id) => props.deleteTodo(id)}
+            edit={(id) => { setTextValue(choseText(id));}}
             />    
           {/* {console.log(props.todos)} */}
         </View>
@@ -171,8 +178,8 @@ const mapDispatchToProps = dispatch => ({
 
     addTodo: (value) => dispatch(addTodo(value)),
     checkTodo: (id) => dispatch(checkTodo(id)),
-    deleteTodo: (id) => dispatch(deleteTodo(id))
-
+    deleteTodo: (id) => dispatch(deleteTodo(id)),
+    editTodo: (id,value) => dispatch(deleteTodo(id, value))
 });
 
 // const mapDispatchToProps = dispatch => (
