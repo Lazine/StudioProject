@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, StatusBar, SafeAreaView, TextInput,TouchableWithoutFeedback, Keyboard, Image, TouchableOpacity, ScrollView, FlatList, TouchableHighlight } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { addTodo, editTodo, deleteTodo, checkTodo } from '../redux/actions/actions';
+import { addTodo, editTodo, deleteTodo, checkTodo, clearTodo } from '../redux/actions/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EIcon from 'react-native-vector-icons/EvilIcons';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -20,7 +20,7 @@ const Header = (props) => {
         <Icon name="text" size={30} color="#262626" />
       </TouchableOpacity>
       <Text style={styles.headerText}>NyaNyaNyaStudio</Text>
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity onPress={() => props.onPress()}>
         {/* <Icon name="rocket" size={30} color="#a7a7a7" /> */}
         <Image 
           source={require('../image/nya.png')} 
@@ -80,7 +80,7 @@ const Todo = (props) => {
   _keyExtractor = (item, index) => index.toString();
   return(
     <FlatList
-    data={props.data}
+      data={props.data}
       renderItem={this._renderItem}
       keyExtractor={this._keyExtractor}
       // inverted={true}
@@ -93,23 +93,24 @@ const Todo = (props) => {
 const TodoScreen = (props) => {
   const [textValue, setTextValue] = useState('');
   const [activeInput, setActiveInput] = useState(false);
-  // const [todos, setTodos] = useState([]);
+  const [todoId, setTodoId] = useState('');
 
   const choseText = (id) => { 
-    const pressObject = props.todos.find(todo => todo.id === id).value;
-    return pressObject; 
+    return props.todos.find(todo => todo.id === id);
     // console.log(pressObject.value);
   };
 
   const addNewTodo = (value) => {
-    if(props.id){
-      // props.editTodo(value);
-      null
-      // console.log(id);
+    // const textId = props.todos.some(todo => todo.id === choseText(id));
+    if(todoId !== '' ){
+      // null
+      props.editTodo(todoId, value);
     }else{
       props.addTodo(value);
     }
+    console.log(todoId);
     this.textInput.clear();
+    setTodoId('');
   };
   
 
@@ -118,8 +119,8 @@ const TodoScreen = (props) => {
     <DismissKeyboard>
       <SafeAreaView style={styles.body}>
         <StatusBar />
-        <Header onPress={() => setTodos('')} />
-        <View style={styles.input}>
+        <Header onPress={(value) => props.clearTodo(value)} />
+        <View style={styles.rowCenter}>
           <Icon name="pencil-outline" size={16} style={styles.writeIcon} />
           <TextInput
             style={[styles.addText, activeInput ? styles.activeInput : null]}
@@ -134,7 +135,7 @@ const TodoScreen = (props) => {
             // value={textValue}
             defaultValue={textValue}
             // onChangeText={(text) => setTextValue(text)}  // triggered when you type any symbol in the text input
-            onSubmitEditing={value => addNewTodo(value.nativeEvent.text)} //triggered when you click the text input submit button
+            onSubmitEditing={(value, id) => addNewTodo(value.nativeEvent.text, id)} //triggered when you click the text input submit button
             onFocus={() => setActiveInput(true)}
             onBlur={() => setActiveInput(false)}
           />
@@ -144,15 +145,25 @@ const TodoScreen = (props) => {
             </TouchableOpacity>
           ) : null}
         </View>
+        {/* <View style={styles.rowCenter}>
+          <TouchableOpacity>
+            <Text>ALL</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>DONE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>UNDO</Text>
+          </TouchableOpacity>
+        </View> */}
         {/* <Text>{props.todosk}</Text> */}
         <View style={styles.listItems}>
           <Todo 
             data={props.todos} 
             check={(id) => props.checkTodo(id)}
             delete={(id) => props.deleteTodo(id)}
-            edit={(id) => { setTextValue(choseText(id));}}
+            edit={(id) => { setTextValue(choseText(id).value), setTodoId(choseText(id).id) }}
             />    
-          {/* {console.log(props.todos)} */}
         </View>
         {/* <TouchableOpacity style={styles.bigCat}>
           <Image
@@ -175,11 +186,11 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-
     addTodo: (value) => dispatch(addTodo(value)),
     checkTodo: (id) => dispatch(checkTodo(id)),
     deleteTodo: (id) => dispatch(deleteTodo(id)),
-    editTodo: (id,value) => dispatch(deleteTodo(id, value))
+    editTodo: (id,value) => dispatch(editTodo(id, value)),
+    clearTodo: (value) => dispatch(clearTodo(value)),
 });
 
 // const mapDispatchToProps = dispatch => (

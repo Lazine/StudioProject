@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
   nyaIcon: {
     width: 30,
   },
-  input: {
+  rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -45,12 +45,15 @@ const todoReducer = (state = initialState, action) => {
       return {
         ...state,
         todoList: state.todoList.map(todo =>
-        todo.id === action.payload.id ? { ...todo, value: action.value } : todo
+        todo.id === action.payload.id ? { ...todo, value: action.payload.value } : todo,
         )
       }
       
     case 'CLEAR_TODO':
-      return [...state];
+      return {
+        ...state,
+        todoList: []
+      }
 
 		default:
       return state;
