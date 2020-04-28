@@ -1,4 +1,4 @@
-import { TodoActionType } from '../actions/actions';
+import { ADD_TODO, CHECK_TODO, DELETE_TODO, EDIT_TODO, CLEAR_TODO } from '../actions/actionType';
 
 const initialState = {
   todoList: [
@@ -9,11 +9,11 @@ const initialState = {
   // QQ: '123',
 }
 
-const todoReducer = (state = initialState, action) => {
+const TodoReducer = (state = initialState, action) => {
 
   switch(action.type){
 		
-		case 'ADD_TODO':
+		case ADD_TODO:
       return {
         ...state,
         todoList: [...state.todoList, action.payload
@@ -24,16 +24,8 @@ const todoReducer = (state = initialState, action) => {
         // }
         ]
       }
-    
-    case 'DELETE_TODO':
-      return {
-        ...state,
-        todoList: state.todoList.filter(todo =>
-          todo.id !== action.payload.id,
-        )
-      }
       
-    case 'CHECK_TODO':
+    case CHECK_TODO:
       return {
         ...state,
         todoList: state.todoList.map(todo =>
@@ -41,7 +33,15 @@ const todoReducer = (state = initialState, action) => {
         )
       }
 
-    case 'EDIT_TODO': 
+    case DELETE_TODO:
+      return {
+        ...state,
+        todoList: state.todoList.filter(todo =>
+          todo.id !== action.payload.id,
+        )
+      }
+
+    case EDIT_TODO: 
       return {
         ...state,
         todoList: state.todoList.map(todo =>
@@ -49,7 +49,7 @@ const todoReducer = (state = initialState, action) => {
         )
       }
       
-    case 'CLEAR_TODO':
+    case CLEAR_TODO:
       return {
         ...state,
         todoList: []
@@ -61,4 +61,4 @@ const todoReducer = (state = initialState, action) => {
   }
 };
 
-export default todoReducer;  
+export default TodoReducer;  

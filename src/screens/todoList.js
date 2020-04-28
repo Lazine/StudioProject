@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, Button, StatusBar, SafeAreaView, TextInput,TouchableWithoutFeedback, Keyboard, Image, TouchableOpacity, ScrollView, FlatList, TouchableHighlight } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { addTodo, editTodo, deleteTodo, checkTodo, clearTodo } from '../redux/actions/actions';
+import { bindActionCreators } from "redux";
+import { addTodo, editTodo, deleteTodo, checkTodo, clearTodo, setFilter } from '../redux/actions/actions';
+import { SHOW_ALL, SHOW_COMPLETED, SHOW_UNDO} from '../redux/actions/actionType';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EIcon from 'react-native-vector-icons/EvilIcons';
 import FIcon from 'react-native-vector-icons/Feather';
@@ -89,11 +91,11 @@ const Todo = (props) => {
     )
   }
 
-
 const TodoScreen = (props) => {
   const [textValue, setTextValue] = useState('');
   const [activeInput, setActiveInput] = useState(false);
   const [todoId, setTodoId] = useState('');
+  // const [filterType, setFilterType] = useState('all');
 
   const choseText = (id) => { 
     return props.todos.find(todo => todo.id === id);
@@ -113,13 +115,30 @@ const TodoScreen = (props) => {
     setTodoId('');
   };
   
+  const filterTodos = (filter) => {
+    switch (filter) {
 
+      case SHOW_ALL:
+        return props.todos;
+        
+      case SHOW_COMPLETED:
+        return props.todos.filter(todo => todo.isCheck === true);
+
+      case SHOW_UNDO:
+        return props.todos.filter(todo => todo.isCheck === false);
+
+      default:
+        return props.todos;
+    }
+  };
 
   return (
     <DismissKeyboard>
       <SafeAreaView style={styles.body}>
         <StatusBar />
         <Header onPress={(value) => props.clearTodo(value)} />
+        
+        {/* 輸入框 */}
         <View style={styles.rowCenter}>
           <Icon name="pencil-outline" size={16} style={styles.writeIcon} />
           <TextInput
@@ -145,26 +164,35 @@ const TodoScreen = (props) => {
             </TouchableOpacity>
           ) : null}
         </View>
-        {/* <View style={styles.rowCenter}>
-          <TouchableOpacity>
-            <Text>ALL</Text>
+        
+        {/* 篩選 */}
+        <View style={styles.rowCenter}>
+          <TouchableOpacity style={styles.tab} onPress={() => props.setFilter(SHOW_ALL)}>
+            <Text style={[styles.tabText, (props.filter === SHOW_ALL) ? styles.tabActiveText : null]}>ALL</Text>
+            {(props.filter === SHOW_ALL) ? <View style={styles.tabBorder}></View> : null }
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>DONE</Text>
+          <TouchableOpacity style={styles.tab} onPress={() => props.setFilter(SHOW_COMPLETED)}>
+            <Text style={[styles.tabText, (props.filter === SHOW_COMPLETED) ? styles.tabActiveText : null]}>DONE</Text>
+            {(props.filter === SHOW_COMPLETED) ? <View style={styles.tabBorder}></View> : null }
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>UNDO</Text>
+          <TouchableOpacity style={styles.tab} onPress={() => props.setFilter(SHOW_UNDO)}>
+            <Text style={[styles.tabText, (props.filter === SHOW_UNDO) ? styles.tabActiveText : null]}>UNDO</Text>
+            {(props.filter === SHOW_UNDO) ?<View style={styles.tabBorder}></View> : null }
           </TouchableOpacity>
-        </View> */}
+        </View>
+
         {/* <Text>{props.todosk}</Text> */}
+
+        {/* 列表 */}
         <View style={styles.listItems}>
           <Todo 
-            data={props.todos} 
+            data={filterTodos(props.filter)} 
             check={(id) => props.checkTodo(id)}
             delete={(id) => props.deleteTodo(id)}
             edit={(id) => { setTextValue(choseText(id).value), setTodoId(choseText(id).id) }}
             />    
         </View>
+
         {/* <TouchableOpacity style={styles.bigCat}>
           <Image
             source={require('./image/bigCat_angry.png')}
@@ -180,24 +208,31 @@ const TodoScreen = (props) => {
 
 function mapStateToProps(state){
   return{
-    todosk: state.todoReducer.QQ,
-    todos: state.todoReducer.todoList,
+    todosk: state.TodoReducer.QQ,
+    todos: state.TodoReducer.todoList,
+    filter: state.FilterReducer,
   };
 }
 
-const mapDispatchToProps = dispatch => ({
-    addTodo: (value) => dispatch(addTodo(value)),
-    checkTodo: (id) => dispatch(checkTodo(id)),
-    deleteTodo: (id) => dispatch(deleteTodo(id)),
-    editTodo: (id,value) => dispatch(editTodo(id, value)),
-    clearTodo: (value) => dispatch(clearTodo(value)),
-});
+// const mapDispatchToProps = dispatch => ({
+//     addTodo: (value) => dispatch(addTodo(value)),
+//     checkTodo: (id) => dispatch(checkTodo(id)),
+//     deleteTodo: (id) => dispatch(deleteTodo(id)),
+//     editTodo: (id,value) => dispatch(editTodo(id, value)),
+//     clearTodo: (value) => dispatch(clearTodo(value)),
+//     setFilter: () => dispatch(setFilter()),
+// });
 
-// const mapDispatchToProps = dispatch => (
-//   bindActionCreators({
-//     addTodo,
-//   }, dispatch)
-// );
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    addTodo,
+    checkTodo,
+    deleteTodo,
+    editTodo,
+    clearTodo,
+    setFilter,
+  }, dispatch)
+);
 
 const TodolistScreen = connect(mapStateToProps, mapDispatchToProps)(TodoScreen);
 
